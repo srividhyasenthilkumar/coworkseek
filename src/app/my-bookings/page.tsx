@@ -1,0 +1,53 @@
+"use client";
+
+import Image from "next/image";
+import profile from "../../assets/user.png";
+import banner from "../../assets/empty-living-room-decorated-fun-gathering-with-friends-having-alcoholic-drinks-snacks-nobody-apartment-with-modern-board-games-chess-enjoy-home-meeting-entertainment.jpg"
+export default function ProfilePage() {
+  return (
+    <>
+      {/* HERO */}
+      <section className="relative w-full h-[350px] overflow-hidden">
+        <Image
+          src={banner}
+          alt="Banner"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/70"></div>
+
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 text-white">
+          <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-wide animate-fadeIn">
+            My bookings
+          </h1>
+        </div>
+      </section>
+
+      <section className="bg-gray-100 min-h-screen py-16 px-6">
+        <div className="max-w-6xl mx-auto space-y-10">
+          {/* PROFILE HEADER */}
+          <div className="bg-white rounded-2xl shadow p-8 flex flex-col md:flex-row items-center gap-8">
+            <div className="relative h-32 w-32 rounded-full overflow-hidden border-4 border-gray-200">
+              <Image
+                src={profile}
+                alt="Profile Picture"
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="text-center md:text-left">
+              <h1 className="text-2xl font-bold text-gray-800"> User Name</h1>
+              <p className="text-gray-500 mt-1">Coworking Space Owner</p>
+              <p className="text-sm text-gray-400 mt-2">
+                Member since Jan 2024
+              </p>
+            </div>
+          </div>
+         
+        </div>
+      </section>
+    </>
+  );
+}
