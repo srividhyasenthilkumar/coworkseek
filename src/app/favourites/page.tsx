@@ -1,7 +1,12 @@
-export default function Favourites(){
-    return(
-        <>
-        <h1>hello</h1>
-        </>
-    )
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function Favourites() {
+    const router = useRouter();
+    useEffect(() => {
+        router.push("/profile?tab=favorites");
+    }, [router]);
+
+    return null;
 }

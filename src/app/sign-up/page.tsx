@@ -5,7 +5,48 @@ import image from "../../assets/home/casually-dressed-businessmen-and-businesswo
 import logo from "../../assets/logo.webp";
 import banner from "../../assets/home/office-modern-loft-2026-01-05-06-03-15-utc.jpg";
 import Link from "next/link";
+import { useState } from "react";
+import { fetchApi } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+
 export default function ListingForm() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const { login: authLogin } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    try {
+      if (isLogin) {
+        const data = await fetchApi("/users/login/", {
+          method: "POST",
+          body: JSON.stringify({
+            username: formData.username,
+            password: formData.password,
+          }),
+        });
+        authLogin(data);
+      } else {
+        const data = await fetchApi("/users/register/", {
+          method: "POST",
+          body: JSON.stringify(formData),
+        });
+        authLogin(data);
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred");
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   return (
     <section className="min-h-screen flex items-center justify-center py-30 md:py-3 bg-gray-100 px-6">
       {/* <Link href="/">
@@ -23,9 +64,13 @@ export default function ListingForm() {
         <div className="p-10 md:p-14 flex flex-col justify-center z-10 bg-white">
           <div className="flex items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+              <h1 className="text-3xl font-bold text-gray-800">
+                {isLogin ? "Welcome Back" : "Create Account"}
+              </h1>
               <p className="text-gray-500 mt-2">
-                Login to manage your coworking listings
+                {isLogin
+                  ? "Login to manage your coworking listings"
+                  : "Join us to find or list the best coworking spaces"}
               </p>
             </div>
             <div className="relative w-28 h-14">
@@ -39,15 +84,22 @@ export default function ListingForm() {
             </div>
           </div>
 
-          <form className="mt-10 space-y-6">
-            {/* EMAIL */}
+          <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <p className="text-red-500 text-sm font-medium">{error}</p>
+            )}
+            {/* USERNAME */}
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2">
-                Email Address
+                Username
               </label>
               <input
-                type="email"
-                placeholder="you@coworkseek.com"
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="johndoe"
+                required
                 className="
                   w-full px-4 py-3 border rounded-xl
                   focus:outline-none focus:ring-2 focus:ring-red-500
@@ -56,6 +108,28 @@ export default function ListingForm() {
               />
             </div>
 
+            {/* EMAIL (Only for Sign-up) */}
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="you@coworkseek.com"
+                  required
+                  className="
+                    w-full px-4 py-3 border rounded-xl
+                    focus:outline-none focus:ring-2 focus:ring-red-500
+                    transition
+                  "
+                />
+              </div>
+            )}
+
             {/* PASSWORD */}
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -63,7 +137,11 @@ export default function ListingForm() {
               </label>
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="••••••••"
+                required
                 className="
                   w-full px-4 py-3 border rounded-xl
                   focus:outline-none focus:ring-2 focus:ring-red-500
@@ -79,9 +157,11 @@ export default function ListingForm() {
                 Remember me
               </label>
 
-              <span className="text-red-500 font-semibold hover:underline cursor-pointer">
-                Forgot password?
-              </span>
+              {isLogin && (
+                <span className="text-red-500 font-semibold hover:underline cursor-pointer">
+                  Forgot password?
+                </span>
+              )}
             </div>
 
             {/* BUTTON */}
@@ -94,15 +174,18 @@ export default function ListingForm() {
                 transition-all duration-300
               "
             >
-              Login
+              {isLogin ? "Login" : "Register"}
             </button>
           </form>
 
           {/* EXTRA */}
           <p className="text-center text-sm text-gray-500 mt-8">
-            Don’t have an account?{" "}
-            <span className="text-red-500 font-semibold cursor-pointer">
-              Register
+            {isLogin ? "Don’t have an account? " : "Already have an account? "}
+            <span
+              className="text-red-500 font-semibold cursor-pointer"
+              onClick={() => setIsLogin(!isLogin)}
+            >
+              {isLogin ? "Register" : "Login"}
             </span>
           </p>
         </div>

@@ -3,110 +3,126 @@ import banner from "../../assets/home/3d-rendering-business-meeting-working-room
 import { MapPin, Phone, Mail } from "lucide-react";
 export default function ContactSection() {
   return (
-    <>
-      <section className="relative w-full h-[450px] overflow-hidden">
+    <main className="bg-white">
+      {/* HERO SECTION */}
+      <section className="relative h-[60vh] flex items-center overflow-hidden">
         <Image
           src={banner}
-          alt="Banner"
+          alt="Contact Support"
           fill
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/70"></div>
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 uppercase">
-            Contact Us
+        <div className="absolute inset-0 bg-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full text-white text-center">
+          <div className="inline-flex items-center gap-3 bg-red-600/10 backdrop-blur-md border border-red-500/30 px-4 py-2 rounded-full mb-8">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <p className="uppercase tracking-[0.2em] text-[10px] font-black">
+              Connect With Excellence
+            </p>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black mb-8 leading-[1.1] italic uppercase tracking-tight">
+            Let's Start Your <br />
+            <span className="text-red-600">Breakthrough.</span>
           </h1>
+          <p className="text-xl text-gray-300 leading-relaxed font-medium max-w-2xl mx-auto">
+            Whether you're looking for an elite workspace or scaling your host network, our team is here to ensure your journey is seamless.
+          </p>
         </div>
       </section>
 
-      <section className="w-full bg-gradient-to-br from-gray-100 via-white to-gray-200 py-24 px-6 relative overflow-hidden">
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-400/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-72 h-72 bg-pink-400/20 rounded-full blur-3xl"></div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-3 gap-10 mb-20">
-            <div className="group bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl p-10 text-center shadow-lg hover:shadow-2xl hover:-translate-y-3 transition-all duration-500">
-              <MapPin
-                className="mx-auto text-red-500 mb-6 group-hover:scale-125 transition duration-500"
-                size={45}
-              />
-              <h3 className="text-xl font-semibold mb-4">Office Address</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Karuna Conclave, AD 42 & 45, 4th Ave, Shanthi Colony, Anna
-                Nagar, Chennai, Tamil Nadu 600040
-              </p>
-            </div>
-
-            <div className="group bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl p-10 text-center shadow-lg hover:shadow-2xl hover:-translate-y-3 transition-all duration-500">
-              <Phone
-                className="mx-auto text-red-500 mb-6 group-hover:scale-125 transition duration-500"
-                size={45}
-              />
-              <h3 className="text-xl font-semibold mb-4">Call to Us</h3>
-              <p className="text-gray-600 text-sm">Mobile: +91 99622 62210</p>
-            </div>
-
-            <div className="group bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl p-10 text-center shadow-lg hover:shadow-2xl hover:-translate-y-3 transition-all duration-500">
-              <Mail
-                className="mx-auto text-red-500 mb-6 group-hover:scale-125 transition duration-500"
-                size={45}
-              />
-              <h3 className="text-xl font-semibold mb-4">Email Address</h3>
-              <p className="text-gray-600 text-sm">info@coworkseek.com</p>
-            </div>
+      {/* CONTACT INFO BLOCKS */}
+      <section className="py-32 px-6 bg-gray-50/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { title: "Elite Command Center", detail: "Karuna Conclave, Anna Nagar, Chennai, TN 600040", icon: MapPin },
+              { title: "Direct Assistance", detail: "+91 99622 62210", icon: Phone },
+              { title: "Digital Correspondence", detail: "info@coworkseek.com", icon: Mail },
+            ].map((block) => (
+              <div key={block.title} className="group bg-white p-12 rounded-[3.5rem] shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-500 text-center relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 -mr-16 -mt-16 rounded-full group-hover:scale-[3] transition-transform duration-700" />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-red-50 text-red-600 rounded-3xl flex items-center justify-center mb-8 mx-auto group-hover:bg-red-600 group-hover:text-white transition-all duration-500">
+                    <block.icon size={28} />
+                  </div>
+                  <h3 className="text-xl font-black italic uppercase text-gray-900 mb-4">{block.title}</h3>
+                  <p className="text-gray-500 font-medium leading-relaxed">{block.detail}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="grid md:grid-cols-2 gap-14 items-center">
-            <div className="rounded-3xl overflow-hidden shadow-2xl hover:scale-[1.02] transition duration-500">
+
+          {/* MAP AND FORM SECTION */}
+          <div className="mt-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
+            {/* Map */}
+            <div className="relative rounded-[4rem] overflow-hidden shadow-3xl min-h-[500px] border-8 border-white">
               <iframe
                 src="https://maps.google.com/maps?q=Anna%20Nagar%20Chennai&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                className="w-full h-[520px]"
+                className="absolute inset-0 w-full h-full border-none grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
                 loading="lazy"
               ></iframe>
             </div>
-            <div className="bg-white/80 backdrop-blur-xl border border-white/40 rounded-3xl shadow-2xl p-12 hover:shadow-red-200 transition duration-500">
-              <h2 className="text-3xl font-bold mb-8 relative inline-block">
-                Send Us Message
-                <span className="absolute left-0 -bottom-2 w-16 h-1 bg-red-500 rounded-full"></span>
-              </h2>
+
+            {/* Form */}
+            <div className="bg-white p-12 md:p-16 rounded-[4rem] shadow-3xl border border-gray-100 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[6px] bg-red-600" />
+              <h3 className="text-3xl font-black italic uppercase text-gray-900 mb-10">
+                Send a <br />
+                <span className="text-red-600 text-5xl">Transmission</span>
+              </h3>
 
               <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-4">Your Name</label>
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-red-600 transition-all outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-4">Digital Identity (Email)</label>
+                    <input
+                      type="email"
+                      placeholder="john@example.com"
+                      className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-red-600 transition-all outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-4">Primary Contact No.</label>
                   <input
                     type="text"
-                    placeholder="Name"
-                    className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+                    placeholder="+91 00000 00000"
+                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-red-600 transition-all outline-none"
                   />
                 </div>
 
-                <input
-                  type="text"
-                  placeholder="Phone No"
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                />
-
-                <textarea
-                  rows={5}
-                  placeholder="Message"
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                ></textarea>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-4">Your Intel (Message)</label>
+                  <textarea
+                    rows={6}
+                    placeholder="Tell us about your breakthrough requirements..."
+                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-red-600 transition-all outline-none resize-none"
+                  ></textarea>
+                </div>
 
                 <button
                   type="submit"
-                  className="relative overflow-hidden bg-red-500 hover:bg-red-600 text-white px-10 py-3 rounded-full font-semibold tracking-wide transition-all duration-300 hover:scale-105 shadow-lg"
+                  className="w-full bg-red-600 hover:bg-gray-900 text-white font-black uppercase text-xs tracking-[0.3em] py-6 rounded-2xl shadow-xl shadow-red-900/20 transition-all active:scale-[0.98]"
                 >
-                  Submit
+                  Establish Connection
                 </button>
               </form>
             </div>
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

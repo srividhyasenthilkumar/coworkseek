@@ -1,11 +1,82 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import image from "../../assets/home/casually-dressed-businessmen-and-businesswomen-hav-2026-01-05-06-34-12-utc.jpg";
+import { fetchApi, BASE_URL } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import logo from "../../assets/logo.webp"
-import banner from "../../assets/home/office-modern-loft-2026-01-05-06-03-15-utc.jpg"
-import Link from "next/link";
+
 export default function ListingForm() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [cities, setCities] = useState<any[]>([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    city: "",
+    area: "",
+    price: "",
+    image: null as File | null,
+  });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchApi("/cities/")
+      .then((data) => setCities(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl font-semibold mb-4">Please log in to list a space.</p>
+          <button
+            onClick={() => router.push("/sign-up")}
+            className="bg-red-500 text-white px-6 py-2 rounded-lg"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.image) {
+      alert("Please upload an image.");
+      return;
+    }
+
+    setLoading(true);
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("city", formData.city);
+    data.append("area", formData.area);
+    data.append("price", formData.price);
+    data.append("image", formData.image);
+
+    try {
+      // Use raw fetch for FormData as fetchApi might be set for JSON
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${BASE_URL}/spaces/`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Token ${token}`,
+        },
+        body: data,
+      });
+
+      if (!response.ok) throw new Error("Failed to create listing");
+
+      alert("Listing created successfully!");
+      router.push("/profile");
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <section className="min-h-screen flex items-center justify-center py-30 md:py-3 bg-gray-100 px-6">
       {/* <Link href="/">
@@ -23,9 +94,9 @@ export default function ListingForm() {
         <div className="p-10 md:p-14 flex flex-col justify-center z-10 bg-white">
           <div className="flex items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+              <h1 className="text-3xl font-bold text-gray-800">List Your Space</h1>
               <p className="text-gray-500 mt-2">
-                Login to manage your coworking listings
+                Share your workspace with the community
               </p>
             </div>
             <div className="relative w-28 h-14">
@@ -39,83 +110,107 @@ export default function ListingForm() {
             </div>
           </div>
 
-          <form className="mt-10 space-y-6">
-            {/* EMAIL */}
+          <form onSubmit={handleSubmit} className="mt-10 space-y-4">
+            {/* NAME */}
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Email Address
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Space Name
               </label>
               <input
-                type="email"
-                placeholder="you@coworkseek.com"
-                className="
-                  w-full px-4 py-3 border rounded-xl
-                  focus:outline-none focus:ring-2 focus:ring-red-500
-                  transition
-                "
+                required
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="e.g. Creative Hub"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
               />
             </div>
 
-            {/* PASSWORD */}
+            {/* CITY & AREA */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">City</label>
+                <select
+                  required
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+                >
+                  <option value="">Select City</option>
+                  {cities.map((city) => (
+                    <option key={city.id} value={city.id}>{city.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Area</label>
+                <input
+                  required
+                  type="text"
+                  value={formData.area}
+                  onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                  placeholder="e.g. T Nagar"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* PRICE */}
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Password
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Price (Monthly ₹)
               </label>
               <input
-                type="password"
-                placeholder="••••••••"
-                className="
-                  w-full px-4 py-3 border rounded-xl
-                  focus:outline-none focus:ring-2 focus:ring-red-500
-                  transition
-                "
+                required
+                type="number"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                placeholder="e.g. 5000"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
               />
             </div>
 
-            {/* OPTIONS */}
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-gray-600">
-                <input type="checkbox" className="accent-red-500" />
-                Remember me
+            {/* IMAGE */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Space Image
               </label>
-
-              <span className="text-red-500 font-semibold hover:underline cursor-pointer">
-                Forgot password?
-              </span>
+              <input
+                required
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })}
+                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+              />
             </div>
 
             {/* BUTTON */}
             <button
               type="submit"
+              disabled={loading}
               className="
                 w-full bg-red-500 text-white font-bold py-3 rounded-xl
-                hover:bg-red-600 hover:scale-[1.02]
-                active:scale-95
-                transition-all duration-300
+                hover:bg-red-600 transition disabled:bg-gray-400 mt-4
               "
             >
-              Login
+              {loading ? "Creating..." : "List Space Now"}
             </button>
           </form>
-
-          {/* EXTRA */}
-          <p className="text-center text-sm text-gray-500 mt-8">
-            Don’t have an account?{" "}
-            <span className="text-red-500 font-semibold cursor-pointer">
-              Register
-            </span>
-          </p>
         </div>
 
         {/* RIGHT – IMAGE */}
         <div className="relative hidden md:block">
-          <Image
-            src={image}
-            alt="Coworking Space"
-            fill
-            className="object-cover"
-            priority
-          />
+          <div className="absolute inset-0 bg-red-600/10 z-10" />
+          {/* Use a placeholder or different image since I don't have the original import now */}
+          <div className="h-full w-full bg-gray-200 flex items-center justify-center">
+            <Image
+              src={logo}
+              alt="placeholder"
+              width={200}
+              height={100}
+              className="opacity-50"
+            />
+          </div>
 
           <div className="absolute bottom-10 left-10 right-10 text-white">
             {/* <h2 className="text-2xl font-bold">Manage Your Coworking Spaces</h2>

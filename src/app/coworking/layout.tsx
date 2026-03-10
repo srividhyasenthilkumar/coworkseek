@@ -9,7 +9,7 @@ export default function CoworkingLayout({
   return (
     <>
     
-      <section className="relative min-h-[80vh] md:min-h-[70vh]   w-full overflow-hidden">
+      {/* <section className="relative min-h-[80vh] md:min-h-[70vh]  py-20 w-full overflow-hidden">
         <Image
           src={banner}
           alt="Coworking Space"
@@ -48,7 +48,7 @@ export default function CoworkingLayout({
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       <main>{children}</main>
     </>
   );
