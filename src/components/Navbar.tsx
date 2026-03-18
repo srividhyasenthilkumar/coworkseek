@@ -123,7 +123,7 @@ export default function Navbar() {
                     {[
                       { label: "My Profile", path: "/profile" },
                       { label: "My Bookings", path: "/profile?tab=bookings" },
-                      { label: "My Favorites", path: "/profile?tab=favorites" },
+                      { label: "My Favourites", path: "/profile?tab=favourites" },
                     ].map((link) => (
                       <Link
                         key={link.path}
@@ -142,7 +142,7 @@ export default function Navbar() {
                   </>
                 ) : (
                   <Link
-                    href="/sign-up"
+                    href="/login"
                     className="block px-4 py-3 text-[11px] font-black uppercase text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors text-center"
                   >
                     Login / Join Now
@@ -223,7 +223,7 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <Link href="/sign-up" onClick={() => setOpen(false)} className="block bg-red-600 text-center py-5 rounded-3xl font-black uppercase tracking-widest text-xs">
+                <Link href="/login" onClick={() => setOpen(false)} className="block bg-red-600 text-center py-5 rounded-3xl font-black uppercase tracking-widest text-xs">
                   Login / Sign Up
                 </Link>
               )}

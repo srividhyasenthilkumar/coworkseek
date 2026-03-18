@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import Modal from "@/components/Modal";
 import {
     Check,
     MapPin,
@@ -14,7 +15,8 @@ import {
     Calendar,
     Clock,
     ChevronLeft,
-    Star
+    Star,
+    TriangleAlert
 } from "lucide-react";
 
 export default function BookingPage() {
@@ -25,7 +27,37 @@ export default function BookingPage() {
     const [loading, setLoading] = useState(true);
     const [bookingDate, setBookingDate] = useState(new Date().toISOString().split('T')[0]);
     const [bookingTime, setBookingTime] = useState("09:00");
+    const [fullName, setFullName] = useState(user?.username || "");
+    const [email, setEmail] = useState(user?.email || "");
+    const [phone, setPhone] = useState("");
+    const [duration, setDuration] = useState("1 Day");
+    const [seats, setSeats] = useState(1);
+    const [notes, setNotes] = useState("");
     const [isBooking, setIsBooking] = useState(false);
+
+    // Modal State
+    const [modalConfig, setModalConfig] = useState<{
+        isOpen: boolean;
+        type: "success" | "error";
+        title: string;
+        message: string;
+        actionText?: string;
+        onAction?: () => void;
+    }>({
+        isOpen: false,
+        type: "success",
+        title: "",
+        message: "",
+    });
+
+    const closeModal = () => setModalConfig({ ...modalConfig, isOpen: false });
+
+    useEffect(() => {
+        if (user) {
+            setFullName(user.username);
+            setEmail(user.email);
+        }
+    }, [user]);
 
     useEffect(() => {
         fetchApi(`/spaces/${id}/`)
@@ -36,8 +68,24 @@ export default function BookingPage() {
 
     const handleBook = async () => {
         if (!user) {
-            alert("Please log in to book this space.");
-            router.push("/sign-up");
+            setModalConfig({
+                isOpen: true,
+                type: "error",
+                title: "Login Required",
+                message: "Please log in to book this elite workspace.",
+                actionText: "Go to Login",
+                onAction: () => router.push("/login")
+            });
+            return;
+        }
+
+        if (!fullName || !email || !phone || !bookingDate || !bookingTime) {
+            setModalConfig({
+                isOpen: true,
+                type: "error",
+                title: "Missing Info",
+                message: "Please fill in all required fields to proceed with your booking.",
+            });
             return;
         }
 
@@ -47,15 +95,32 @@ export default function BookingPage() {
                 method: "POST",
                 body: JSON.stringify({
                     space: space.id,
-                    booking_date: bookingDate,
-                    booking_time: bookingTime,
-                    status: 'confirmed'
+                    full_name: fullName,
+                    email: email,
+                    phone: phone,
+                    date: bookingDate,
+                    time_slot: bookingTime,
+                    duration: duration,
+                    seats: seats,
+                    notes: notes,
+                    status: 'Confirmed'
                 }),
             });
-            alert("Booking successfully submitted! Your hub is reserved.");
-            router.push("/profile");
+            setModalConfig({
+                isOpen: true,
+                type: "success",
+                title: "Hub Reserved",
+                message: "Your booking was successful. Welcome to the elite network!",
+                actionText: "View Bookings",
+                onAction: () => router.push("/profile?tab=bookings")
+            });
         } catch (err: any) {
-            alert("Error: " + err.message);
+            setModalConfig({
+                isOpen: true,
+                type: "error",
+                title: "Booking Failed",
+                message: err.message || "An unexpected error occurred. Please try again.",
+            });
         } finally {
             setIsBooking(false);
         }
@@ -207,28 +272,101 @@ export default function BookingPage() {
                             </div>
                         </div>
 
-                        <div className="space-y-6 pt-10 border-t border-gray-100">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 flex items-center gap-2 mb-2 ml-4">
-                                    <Calendar size={14} className="text-red-600" /> Deployment Date
-                                </label>
+                        <div className="space-y-6 pt-10 border-t border-gray-100 italic">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Full Name</label>
+                                    <input
+                                        type="text"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        placeholder="John Doe"
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Email Address</label>
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="john@example.com"
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        placeholder="+1 234 567 890"
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Duration</label>
+                                    <select
+                                        value={duration}
+                                        onChange={(e) => setDuration(e.target.value)}
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic appearance-none"
+                                    >
+                                        <option>1 Day</option>
+                                        <option>1 Week</option>
+                                        <option>1 Month</option>
+                                        <option>Custom</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 flex items-center gap-2 mb-1 ml-4">
+                                        <Calendar size={14} className="text-red-600" /> Deployment Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={bookingDate}
+                                        onChange={(e) => setBookingDate(e.target.value)}
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-black outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 flex items-center gap-2 mb-1 ml-4">
+                                        <Clock size={14} className="text-red-600" /> Arrival Time
+                                    </label>
+                                    <input
+                                        type="time"
+                                        value={bookingTime}
+                                        onChange={(e) => setBookingTime(e.target.value)}
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-black outline-none focus:ring-2 focus:ring-red-600 transition-all font-sans not-italic"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Number of Seats</label>
                                 <input
-                                    type="date"
-                                    value={bookingDate}
-                                    onChange={(e) => setBookingDate(e.target.value)}
-                                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-5 text-sm font-black outline-none focus:ring-2 focus:ring-red-600 transition-all"
+                                    type="number"
+                                    min="1"
+                                    value={seats}
+                                    onChange={(e) => setSeats(parseInt(e.target.value))}
+                                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic"
                                 />
                             </div>
 
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 flex items-center gap-2 mb-2 ml-4">
-                                    <Clock size={14} className="text-red-600" /> Arrival Time
-                                </label>
-                                <input
-                                    type="time"
-                                    value={bookingTime}
-                                    onChange={(e) => setBookingTime(e.target.value)}
-                                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-5 text-sm font-black outline-none focus:ring-2 focus:ring-red-600 transition-all font-sans"
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Special Requests / Notes</label>
+                                <textarea
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                    placeholder="Any technical requirements or preferences..."
+                                    rows={3}
+                                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all not-italic resize-none"
                                 />
                             </div>
                         </div>
@@ -262,8 +400,17 @@ export default function BookingPage() {
                         </div>
                     </div>
                 </div>
-
             </div>
+
+            <Modal
+                isOpen={modalConfig.isOpen}
+                onClose={closeModal}
+                type={modalConfig.type}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                actionText={modalConfig.actionText}
+                onAction={modalConfig.onAction}
+            />
         </div>
     );
 }

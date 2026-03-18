@@ -11,6 +11,7 @@ import {
   Phone,
   MapPin,
   Calendar,
+  Clock,
   Heart,
   Layout,
   ChevronRight,
@@ -27,8 +28,8 @@ export default function ProfilePage() {
   const [listings, setListings] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"listings" | "bookings" | "favorites">(
-    ["listings", "bookings", "favorites"].includes(initialTab) ? initialTab : "bookings"
+  const [activeTab, setActiveTab] = useState<"profile" | "bookings" | "favourites" | "listings">(
+    ["profile", "bookings", "favourites", "listings"].includes(initialTab) ? initialTab : "profile"
   );
 
   useEffect(() => {
@@ -109,7 +110,10 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <button className="bg-gray-50 text-gray-600 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-gray-100">
+                  <button
+                    onClick={() => setActiveTab("profile")}
+                    className="bg-gray-50 text-gray-600 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-gray-100"
+                  >
                     Edit Profile
                   </button>
                   <button
@@ -129,39 +133,52 @@ export default function ProfilePage() {
           {/* SIDEBAR TABS */}
           <div className="lg:col-span-1 space-y-2">
             <button
-              onClick={() => setActiveTab("bookings")}
+              onClick={() => setActiveTab("profile")}
               className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all border
-                        ${activeTab === "bookings"
+                ${activeTab === "profile"
                   ? "bg-red-600 text-white border-red-600 shadow-xl shadow-red-100 translate-x-2"
                   : "bg-white text-gray-500 border-transparent hover:bg-gray-100 hover:text-gray-900"
                 }
-                    `}
+              `}
+            >
+              <User size={18} />
+              My Profile
+              <ChevronRight size={16} className={`ml-auto opacity-50 ${activeTab === "profile" ? "block" : "hidden"}`} />
+            </button>
+            <button
+              onClick={() => setActiveTab("bookings")}
+              className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all border
+                ${activeTab === "bookings"
+                  ? "bg-red-600 text-white border-red-600 shadow-xl shadow-red-100 translate-x-2"
+                  : "bg-white text-gray-500 border-transparent hover:bg-gray-100 hover:text-gray-900"
+                }
+              `}
             >
               <Calendar size={18} />
               My Bookings
               <ChevronRight size={16} className={`ml-auto opacity-50 ${activeTab === "bookings" ? "block" : "hidden"}`} />
             </button>
             <button
-              onClick={() => setActiveTab("favorites")}
+              onClick={() => setActiveTab("favourites")}
               className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all border
-                        ${activeTab === "favorites"
+                ${activeTab === "favourites"
                   ? "bg-red-600 text-white border-red-600 shadow-xl shadow-red-100 translate-x-2"
                   : "bg-white text-gray-500 border-transparent hover:bg-gray-100 hover:text-gray-900"
                 }
-                    `}
+              `}
             >
               <Heart size={18} />
-              My Favorites
-              <ChevronRight size={16} className={`ml-auto opacity-50 ${activeTab === "favorites" ? "block" : "hidden"}`} />
+              My Favourites
+              <ChevronRight size={16} className={`ml-auto opacity-50 ${activeTab === "favourites" ? "block" : "hidden"}`} />
             </button>
             <button
               onClick={() => setActiveTab("listings")}
               className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all border
-                        ${activeTab === "listings"
+                ${activeTab === "listings"
                   ? "bg-red-600 text-white border-red-600 shadow-xl shadow-red-100 translate-x-2"
                   : "bg-white text-gray-500 border-transparent hover:bg-gray-100 hover:text-gray-900"
                 }
-                    `}
+              `}
             >
               <Layout size={18} />
               My Listings
@@ -172,6 +189,37 @@ export default function ProfilePage() {
           {/* TAB CONTENT */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 min-h-[500px]">
+              {activeTab === "profile" && (
+                <div>
+                  <div className="mb-10">
+                    <h2 className="text-2xl font-black text-gray-900 italic uppercase">Your Profile</h2>
+                    <p className="text-gray-500 font-medium">Manage your personal information and preferences</p>
+                  </div>
+
+                  <div className="space-y-8 max-w-2xl">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Username</label>
+                        <div className="bg-gray-50 px-6 py-4 rounded-2xl border border-gray-100 font-bold text-gray-900">{user.username}</div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
+                        <div className="bg-gray-50 px-6 py-4 rounded-2xl border border-gray-100 font-bold text-gray-900">{user.email}</div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Member Since</label>
+                      <div className="bg-gray-50 px-6 py-4 rounded-2xl border border-gray-100 font-bold text-gray-900">January 2026</div>
+                    </div>
+
+                    <button className="bg-gray-950 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-red-600 transition-all shadow-xl shadow-gray-200 hover:shadow-red-200 mt-4">
+                      Update Profile Details
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {activeTab === "bookings" && (
                 <div>
                   <div className="mb-10">
@@ -189,29 +237,63 @@ export default function ProfilePage() {
                   ) : (
                     <div className="space-y-6">
                       {bookings.map((booking) => (
-                        <div key={booking.id} className="flex items-center justify-between p-6 rounded-2xl border border-gray-50 hover:border-red-100 hover:bg-red-50/30 transition-all group">
-                          <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-sm group-hover:scale-110 transition-transform">
-                              <Calendar className="text-red-600" />
+                        <div key={booking.id} className="p-8 rounded-[2.5rem] border border-gray-100 hover:border-red-200 hover:bg-red-50/20 transition-all group bg-white shadow-sm overflow-hidden relative">
+                          <div className="absolute top-0 right-0 p-6">
+                            <span className={`
+                              px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest
+                              ${booking.status === 'Confirmed' ? 'bg-green-100 text-green-700' :
+                                booking.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
+                                  'bg-red-100 text-red-700'}
+                            `}>
+                              {booking.status}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col md:flex-row gap-8">
+                            <div className="w-24 h-24 bg-gray-50 rounded-3xl flex items-center justify-center border border-gray-100 group-hover:scale-105 transition-transform shrink-0">
+                              <Calendar className="text-red-600" size={32} />
                             </div>
-                            <div>
-                              <h3 className="font-bold text-lg text-gray-900">{booking.space_name}</h3>
-                              <p className="text-sm text-gray-500 font-medium">
-                                Reserved for: <span className="text-gray-900">{booking.booking_date}</span>
-                                {booking.booking_time && (
-                                  <> at <span className="text-red-600 font-black">{booking.booking_time}</span></>
-                                )}
-                              </p>
+
+                            <div className="flex-grow space-y-4">
+                              <div>
+                                <h3 className="text-2xl font-black text-gray-900 italic uppercase mb-1">{booking.space_name}</h3>
+                                <div className="flex flex-wrap gap-4 items-center text-gray-500">
+                                  <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-red-600">
+                                    <Calendar size={14} /> {booking.date}
+                                  </span>
+                                  <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest">
+                                    <Clock size={14} /> {booking.time_slot}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4 border-t border-gray-50">
+                                <div className="space-y-1">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Duration</p>
+                                  <p className="font-bold text-gray-900">{booking.duration || '1 Day'}</p>
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Seats</p>
+                                  <p className="font-bold text-gray-900">{booking.seats || 1} Person</p>
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Contact</p>
+                                  <p className="font-bold text-gray-900 text-xs truncate">{booking.email}</p>
+                                </div>
+                                <div className="space-y-1 text-right">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Ref ID</p>
+                                  <p className="font-bold text-gray-900">#BK-{booking.id}</p>
+                                </div>
+                              </div>
+
+                              {booking.notes && (
+                                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Notes</p>
+                                  <p className="text-sm text-gray-600 font-medium italic">"{booking.notes}"</p>
+                                </div>
+                              )}
                             </div>
                           </div>
-                          <span className={`
-                                                px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest
-                                                ${booking.status === 'confirmed' ? 'bg-green-100 text-green-700' :
-                              booking.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-red-100 text-red-700'}
-                                            `}>
-                            {booking.status}
-                          </span>
                         </div>
                       ))}
                     </div>
@@ -219,7 +301,7 @@ export default function ProfilePage() {
                 </div>
               )}
 
-              {activeTab === "favorites" && (
+              {activeTab === "favourites" && (
                 <div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-black text-gray-900 italic uppercase">Saved Spaces</h2>

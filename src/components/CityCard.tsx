@@ -11,10 +11,13 @@ export default function CityCard({ city }: any) {
       className="group relative rounded-[2.5rem] overflow-hidden bg-gray-900 shadow-xl hover:shadow-[0_32px_96px_-16px_rgba(0,0,0,0.3)] transition-all duration-700 h-[380px] block border border-white/5"
     >
       <Image
-        src={city.image}
+        src={city.image || "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1000"}
         alt={city.name}
         fill
         className="object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80 group-hover:opacity-100"
+        onError={(e: any) => {
+          e.target.src = "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1000";
+        }}
       />
       {/* LUXURY OVERLAY */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:via-red-600/10 transition-all duration-700"></div>

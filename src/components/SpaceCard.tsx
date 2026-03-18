@@ -16,7 +16,7 @@ export default function SpaceCard({ space, onToggle }: { space: any, onToggle?: 
     e.stopPropagation();
     if (!user) {
       alert("Please log in to add favorites.");
-      router.push("/sign-up");
+      router.push("/login");
       return;
     }
 
@@ -47,10 +47,13 @@ export default function SpaceCard({ space, onToggle }: { space: any, onToggle?: 
       {/* IMAGE CONTAINER */}
       <div className="relative h-60 w-full overflow-hidden">
         <Image
-          src={space.image}
+          src={space.image || "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000"}
           alt={space.name}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-700"
+          onError={(e: any) => {
+            e.target.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000";
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -148,7 +151,7 @@ export default function SpaceCard({ space, onToggle }: { space: any, onToggle?: 
               transition-all duration-500 transform active:scale-95
             "
           >
-            Get Quote
+            Book Now
           </button>
         </div>
       </div>

@@ -145,12 +145,12 @@ export default function HomeSection() {
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl md:text-7xl font-black mb-8 leading-[1.1] italic uppercase tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight italic uppercase tracking-tighter">
               Work from anywhere, <br />
-              <span className="text-red-600">better.</span>
+              <span className="text-red-500">better.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl leading-relaxed font-medium">
+            <p className="text-base md:text-lg text-gray-300 mb- aggregation-10 max-w-2xl leading-relaxed font-medium">
               Join India's most elite network of coworking spaces. From private studios to vibrant community hubs,
               find a workspace that inspires your next big breakthrough.
             </p>
@@ -221,15 +221,15 @@ export default function HomeSection() {
         </div>
 
         {/* Floating Decals */}
-        <div className="absolute bottom-20 right-20 hidden xl:block animate-bounceSlow">
-          <div className="bg-white/10 backdrop-blur-3xl p-6 rounded-[2rem] border border-white/20 shadow-2xl">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center">
-                <CheckCircle className="text-white" />
+        <div className="absolute bottom-10 right-10 hidden xl:block animate-bounceSlow">
+          <div className="bg-white/10 backdrop-blur-3xl p-4 rounded-2xl border border-white/20 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center">
+                <CheckCircle className="text-white" size={20} />
               </div>
               <div>
-                <p className="text-xs font-black uppercase tracking-widest">Verified Hotspot</p>
-                <p className="text-sm text-gray-400 font-medium">Safe, SECURE & High-Speed</p>
+                <p className="text-[10px] font-black uppercase tracking-widest">Verified Hotspot</p>
+                <p className="text-xs text-gray-400 font-medium whitespace-nowrap">Safe, Secure & High-Speed</p>
               </div>
             </div>
           </div>
@@ -248,12 +248,12 @@ export default function HomeSection() {
               </p>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 italic uppercase leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6 italic uppercase leading-tight">
               Designed for the <br />
               <span className="text-red-600">Modern Professional</span>
             </h2>
 
-            <p className="text-gray-500 font-medium text-lg mb-12 max-w-xl leading-relaxed">
+            <p className="text-gray-500 font-medium text-base md:text-lg mb-10 max-w-xl leading-relaxed">
               We've built a platform that removes the friction from finding your next workspace.
               Experience premium support and verified quality at every step.
             </p>
@@ -317,7 +317,7 @@ export default function HomeSection() {
                   Nationwide Network
                 </p>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-gray-900 italic uppercase">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 italic uppercase">
                 Explore Our <br />
                 <span className="text-red-600">Prime Locations</span>
               </h2>
@@ -332,7 +332,7 @@ export default function HomeSection() {
             {/* Featured Big Card - Chennai */}
             <Link
               href="/coworking/chennai"
-              className="lg:col-span-1 group relative rounded-[3rem] overflow-hidden md:h-[1300px] h-[500px] shadow-2xl"
+              className="lg:col-span-1 group relative rounded-[2rem] md:rounded-[3rem] overflow-hidden md:h-auto md:aspect-[3/4] h-[400px] shadow-2xl"
             >
               <Image
                 src={chennai}
@@ -341,9 +341,9 @@ export default function HomeSection() {
                 className="object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[0.2] group-hover:grayscale-0"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-              <div className="absolute bottom-10 left-10 right-10">
-                <h3 className="text-4xl font-black text-white italic uppercase mb-2">Chennai</h3>
-                <p className="text-gray-300 font-medium mb-6">Discover the soul of South India's hub.</p>
+              <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10">
+                <h3 className="text-3xl md:text-4xl font-black text-white italic uppercase mb-2">Chennai</h3>
+                <p className="text-gray-300 text-sm md:text-base font-medium mb-6">Discover the soul of South India's hub.</p>
                 <div className="inline-flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-2xl font-black uppercase text-xs tracking-widest group-hover:bg-white group-hover:text-red-600 transition-all">
                   Browse Chennai
                   <ArrowRight size={16} />
@@ -407,14 +407,14 @@ export default function HomeSection() {
               </p>
             </div>
 
-            <h2 className="text-5xl md:text-7xl font-black italic uppercase leading-[1.1] mb-10 tracking-tighter">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black italic uppercase leading-tight mb-8 tracking-tighter">
               Redefining the <br />
               <span className="text-red-600">Soul of Work.</span>
             </h2>
 
-            <p className="text-xl text-gray-300 mb-10 leading-relaxed font-medium">
+            <p className="text-lg text-gray-300 mb-8 leading-relaxed font-medium">
               At <span className="font-black text-white italic">CoworkSeek</span>, we're not just providing desks; we're facilitating breakthroughs.
-              We've curated an elite ecosystem where creators, startups, and enterprises converge to shape the future.
+              Every workspace is an elite ecosystem where creators converge.
             </p>
 
             <div className="space-y-8 mb-12">

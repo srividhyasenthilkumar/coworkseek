@@ -41,7 +41,7 @@ export default function LocationsPage() {
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">The Global Hub Network</span>
           </div>
 
-          <h1 className="text-6xl md:text-[8rem] font-black text-white leading-[0.85] mb-12 italic uppercase tracking-tighter">
+          <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-black text-white leading-[0.95] mb-12 italic uppercase tracking-tighter">
             Select Your <br />
             <span className="text-red-600">Territory.</span>
           </h1>

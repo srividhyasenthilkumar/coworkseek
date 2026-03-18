@@ -87,7 +87,7 @@ export default function CityTemplate({
                             </p>
                         </div>
 
-                        <h1 className="text-7xl md:text-[10rem] font-black mb-12 leading-[0.85] italic uppercase tracking-tighter animate-fade-in-up delay-100">
+                        <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-black mb-12 leading-[0.95] italic uppercase tracking-tighter animate-fade-in-up delay-100">
                             {cityName}<span className="text-red-600">.</span>
                         </h1>
 

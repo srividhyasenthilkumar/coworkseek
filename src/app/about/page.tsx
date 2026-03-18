@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle, Shield, Zap, Users, ArrowRight, Target, Award } from "lucide-react";
 import banner from "../../assets/home/3d-rendering-business-meeting-working-room-office-building-1-scaled.webp";
-import team_img from "../../assets/home/modern-office-business-meeting-working-room-2-scaled.webp";
+import team_img from "../../assets/home/modern-office-teamwork-co-working-space.webp";
 
 export const metadata = {
     title: "About Us | CoworkSeek",
